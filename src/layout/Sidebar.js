@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import Drawer from '@mui/material/Drawer';
 import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
@@ -9,9 +10,11 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import { NavLink } from 'react-router-dom';
 import { Typography } from '@mui/material';
-import { MessageSharp, ViewList, FileUpload } from '@mui/icons-material';
+import { MessageSharp, ViewList, FileUpload, ExitToApp } from '@mui/icons-material';
 
 const Sidebar = ({ drawerWidth }) => {
+  const navigate = useNavigate();
+
   const menuItems = [
     {
       icon: <FileUpload />,
@@ -29,6 +32,10 @@ const Sidebar = ({ drawerWidth }) => {
       link: 'messages',
     },
   ];
+
+  const logout = () => {
+    navigate('/LoginPage');
+  };
 
   return (
     <Drawer
@@ -77,6 +84,13 @@ const Sidebar = ({ drawerWidth }) => {
           </ListItem>
         ))}
       </List>
+      {/* Logout Button */}
+      <ListItem button onClick={logout}>
+        <ListItemIcon>
+          <ExitToApp />
+        </ListItemIcon>
+        <ListItemText primary="Logout" />
+      </ListItem>
     </Drawer>
   );
 };

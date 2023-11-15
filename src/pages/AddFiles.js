@@ -34,6 +34,13 @@ export default function AddFiles() {
         }}
       >
         <Box component="form" sx={{ mt: 1 }}>
+        <FormControl fullWidth margin="normal">
+            <FormLabel>Create ShortCode</FormLabel>
+            <Stack direction="row" spacing={1}>
+              <TextField type="text" id="text" name="text" onChange={handleFileChange} fullWidth required />
+              {false && <CircularProgress />}
+            </Stack>
+          </FormControl>
           <FormControl fullWidth margin="normal">
             <FormLabel>File</FormLabel>
             <Stack direction="row" spacing={1}>

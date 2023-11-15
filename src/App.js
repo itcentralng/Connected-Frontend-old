@@ -27,7 +27,7 @@ const App = () => {
         <Route index element={<RegistrationPage />} />
 
         <Route path="LoginPage" element={<LoginPage />} />
-        <Route path="register" element={<RegistrationPage />} />
+        <Route path="RegistrationPage" element={<RegistrationPage />} />
 
         {/* Routes with Layout */}
         <Route
