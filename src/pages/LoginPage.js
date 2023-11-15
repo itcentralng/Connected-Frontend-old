@@ -1,9 +1,17 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+
 import { Container, Paper, TextField, Button, Grid, Avatar, Typography } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 
 const LoginPage = () => {
+  const navigate = useNavigate();
+
+  const handleLogin = () => {
+    navigate("/AddFiles");
+  };
+
   return (
     <>
       <Typography component="h1" variant="h5" style={{ marginTop: 50, color: "#1976d2", textAlign: "center" }}>Welcome back to Connected</Typography>
@@ -24,12 +32,12 @@ const LoginPage = () => {
                 <TextField fullWidth label="Password" type="password" variant="outlined" />
               </Grid>
             </Grid>
-            <Button type="submit" fullWidth variant="contained" color="primary" style={{ marginTop: 20 }}>
+            <Button type="submit" fullWidth variant="contained" color="primary" style={{ marginTop: 20 }} onClick={handleLogin}>
               Login
             </Button>
           </form>
           <Typography style={{ marginTop: 10 }}>
-            Don't have an account? <Link to="/registration" style={{ color: "#1976d2" }}>Sign up</Link>
+            Don't have an account? <Link to="/RegistrationPage" style={{ color: "#1976d2" }}>Sign up</Link>
           </Typography>
         </Paper>
       </Container>
