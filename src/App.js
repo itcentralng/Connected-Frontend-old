@@ -23,20 +23,24 @@ const App = () => {
   return (
     <Router>
       <Routes>
+        {/* No Layout for Registration and Login pages */}
+        <Route index element={<RegistrationPage />} />
+
+        <Route path="LoginPage" element={<LoginPage />} />
+        <Route path="register" element={<RegistrationPage />} />
+
+        {/* Routes with Layout */}
         <Route
-          // Shared pages
+          // path="/*"
           element={
             <ProtectedRoute>
               <Layout />
             </ProtectedRoute>
           }
         >
-          <Route path="/" element={<RegistrationPage />} />
           <Route path="addFiles" element={<AddFiles />} />
           <Route path="createMessage" element={<CreateMessage />} />
           <Route path="messages" element={<Messages />} />
-          <Route path="LoginPage" element={<LoginPage />} />
-          <Route path="RegistrationPage" element={<RegistrationPage />} />
         </Route>
 
         <Route path="*" element={<h1>404, page not found</h1>} />
