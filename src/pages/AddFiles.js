@@ -1,24 +1,49 @@
-// import * as React from "react";
-import { Box, Container, CssBaseline, FormControl, CircularProgress, Button, Grid, FormLabel, Stack, TextField } from "@mui/material";
-// import { LoadingButton } from "@mui/lab";
+import * as React from "react";
+import {
+  Box,
+  Container,
+  CssBaseline,
+  FormControl,
+  CircularProgress,
+  Button,
+  FormLabel,
+  Stack,
+  TextField,
+} from "@mui/material";
+import SimpleSnackbar from "../components/snackbar";
 
 export default function AddFiles() {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  // const [fileUrl, setFileUrl] = React.useState(""); //you are not using the variable anywhere so i commented it out --Ibrahim
-  // handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   // your code here
-  // }
+  const [file, setFile] = React.useState("");
+  const [shortcode, setShortCode] = React.useState("");
+  const [addedFile, setAddedFile] = React.useState();
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleFileChange = async (e: any) => {
-    try {
-      const file = e.target.files[0];
+  const handleFileChange = async (e) => {
+    setFile(e.target.files[0]);
+  };
+
+  const handleShortCodeChange = async (e) => {
+    const shortcode = e.target.value;
+    if (!isNaN(shortcode)) {
+      setShortCode(shortcode);
+    }
+  };
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    if (file && shortcode) {
       const formData = new FormData();
       formData.append("file", file);
-      // upload file here and set file URL
-      // setFileUrl("http://fsfdffs");
-    } catch (error) {
-      console.log(error);
+      formData.append("shortcode", shortcode);
+      fetch(`http://localhost:8000/organization/WHO/uploadfile`, {
+        method: "POST",
+        body: formData,
+        mode: "cors",
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => setAddedFile(data));
     }
   };
 
@@ -33,18 +58,35 @@ export default function AddFiles() {
           alignItems: "center",
         }}
       >
+        {addedFile ? (
+          <SimpleSnackbar message="File Upload successfull" />
+        ) : null}
         <Box component="form" sx={{ mt: 1 }}>
-        <FormControl fullWidth margin="normal">
+          <FormControl fullWidth margin="normal">
             <FormLabel>Create ShortCode</FormLabel>
             <Stack direction="row" spacing={1}>
-              <TextField type="text" id="text" name="text" onChange={handleFileChange} fullWidth required />
+              <TextField
+                type="text"
+                id="text"
+                name="text"
+                onChange={handleShortCodeChange}
+                fullWidth
+                required
+              />
               {false && <CircularProgress />}
             </Stack>
           </FormControl>
           <FormControl fullWidth margin="normal">
             <FormLabel>File</FormLabel>
             <Stack direction="row" spacing={1}>
-              <TextField type="file" id="file" name="file" onChange={handleFileChange} fullWidth required />
+              <TextField
+                type="file"
+                id="file"
+                name="file"
+                onChange={handleFileChange}
+                fullWidth
+                required
+              />
               {false && <CircularProgress />}
             </Stack>
           </FormControl>
@@ -54,21 +96,10 @@ export default function AddFiles() {
             // loading variant="outlined"
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
+            onClick={handleFormSubmit}
           >
             Add
           </Button>
-          <Grid container>
-            <Grid item xs>
-              {/* <Link href="#" variant="body2">
-                Forgot password?
-              </Link> */}
-            </Grid>
-            <Grid item>
-              {/* <Link href="#" variant="body2">
-                {"Don't have an account? Sign Up"}
-              </Link> */}
-            </Grid>
-          </Grid>
         </Box>
       </Box>
     </Container>

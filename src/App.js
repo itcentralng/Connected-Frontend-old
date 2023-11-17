@@ -1,19 +1,23 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import Layout from './layout/Layout';
-import CreateMessage from './pages/CreateMessage';
-import Messages from './pages/Messages';
-import AddFiles from './pages/AddFiles';
-import LoginPage from './pages/LoginPage';
-import RegistrationPage from './pages/RegistrationPage';
+import React from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import Layout from "./layout/Layout";
+import CreateMessage from "./pages/CreateMessage";
+import Messages from "./pages/Messages";
+import AddFiles from "./pages/AddFiles";
+import LoginPage from "./pages/LoginPage";
+import RegistrationPage from "./pages/RegistrationPage";
+import { useSelector } from "react-redux";
 
 const ProtectedRoute = ({ children }) => {
-  // Wrapper component for protected routes
-  //   const isAuth = !!user;
-  const isAuth = true;
+  const { isAuth } = useSelector((state) => state.user);
 
   if (!isAuth) {
-    return <Navigate to="/signin" replace />;
+    return <Navigate to="/login" replace />;
   }
 
   return children;
@@ -26,8 +30,8 @@ const App = () => {
         {/* No Layout for Registration and Login pages */}
         <Route index element={<RegistrationPage />} />
 
-        <Route path="LoginPage" element={<LoginPage />} />
-        <Route path="RegistrationPage" element={<RegistrationPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegistrationPage />} />
 
         {/* Routes with Layout */}
         <Route
@@ -38,9 +42,9 @@ const App = () => {
             </ProtectedRoute>
           }
         >
-          <Route path="addFiles" element={<AddFiles />} />
-          <Route path="createMessage" element={<CreateMessage />} />
-          <Route path="messages" element={<Messages />} />
+          <Route path="/addfile" element={<AddFiles />} />
+          <Route path="/createmessage" element={<CreateMessage />} />
+          <Route path="/messages" element={<Messages />} />
         </Route>
 
         <Route path="*" element={<h1>404, page not found</h1>} />

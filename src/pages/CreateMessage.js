@@ -1,49 +1,65 @@
-import React, { useState } from 'react';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
-import { useNavigate } from 'react-router-dom';
-import {
-  FormControl,
-  FormLabel,
-  MenuItem,
-  Select,
-} from '@mui/material';
+import React, { useEffect, useState } from "react";
+import Button from "@mui/material/Button";
+import CssBaseline from "@mui/material/CssBaseline";
+import TextField from "@mui/material/TextField";
+import Box from "@mui/material/Box";
+import Container from "@mui/material/Container";
+import { FormControl, FormLabel, MenuItem, Select } from "@mui/material";
+import SimpleSnackbar from "../components/snackbar";
 
 export default function CreateMessage() {
-  const navigate = useNavigate();
-  const short_code = 4444;
+  const [message, setMessage] = useState("");
+  const [location, setLocation] = useState([]);
+  const [shortcode, setShortCode] = React.useState({ short_code: "" });
+  const [shortcodes, setShortCodes] = React.useState([]);
+  const [areas, setAreas] = React.useState([]);
+  const [showSnack, setShowSnack] = React.useState();
 
-  const [message, setMessage] = useState('');
-  const [location, setLocation] = useState('');
+  useEffect(() => {
+    fetch(`http://localhost:8000/WHO/shortcodes`)
+      .then((res) => res.json())
+      .then((data) => setShortCodes(data?.short_codes));
+    fetch(`http://localhost:8000/areas`)
+      .then((res) => res.json())
+      .then((data) => setAreas(data));
+  }, []);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    handleCreateMessage();
+    if (shortcode.short_code && message && location.length) {
+      fetch(`http://localhost:8000/WHO/message/add`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          content: message,
+          shortcode: shortcode.short_code,
+          areas: location,
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setShowSnack(data.msg ? true : false);
+        });
+    }
+    setAreas([]);
+    setShortCode("");
+    setMessage("");
   };
 
-  const handleCreateMessage = async () => {
-    try {
-      const req = await fetch('/url', {
-        method: 'POST',
-        body: JSON.stringify({
-          short_code,
-          message,
-          location,
-        }),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      if (req.ok) {
-        navigate('/messages');
-      }
-    } catch (error) {
-      console.log(error);
-    }
+  const handleChange = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setLocation(typeof value === "string" ? value.split(",") : value);
+  };
+
+  const handleShortCodeChange = async (e) => {
+    const shortcode = shortcodes.find(
+      (code) => code.short_code === e.target.value
+    );
+    setShortCode(shortcode);
   };
 
   return (
@@ -52,12 +68,28 @@ export default function CreateMessage() {
       <Box
         sx={{
           marginTop: 8,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
         }}
       >
+        {showSnack ? <SimpleSnackbar message="Message sent" /> : null}
         <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
+          <FormControl fullWidth margin="normal">
+            <FormLabel>Choose shortcode</FormLabel>
+            <Select
+              value={shortcode.short_code}
+              onChange={handleShortCodeChange}
+              fullWidth
+              required
+            >
+              {shortcodes?.map((code, i) => (
+                <MenuItem key={i} value={code.short_code}>
+                  {code.short_code}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
           <FormControl fullWidth margin="normal">
             <FormLabel>Message</FormLabel>
             <TextField
@@ -74,11 +106,18 @@ export default function CreateMessage() {
 
           <FormControl fullWidth margin="normal">
             <FormLabel>Area</FormLabel>
-            <Select value={location} onChange={(e) => setLocation(e.target.value)} fullWidth required>
-              <MenuItem value="" disabled>
-                select location
-              </MenuItem>
-              <MenuItem value={'09036215851'}>Zaria</MenuItem>
+            <Select
+              value={location}
+              multiple
+              onChange={handleChange}
+              fullWidth
+              required
+            >
+              {areas.map((area) => (
+                <MenuItem key={area.name} value={area.name}>
+                  {area.name}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
           <Button
@@ -89,18 +128,6 @@ export default function CreateMessage() {
           >
             Send
           </Button>
-          <Grid container>
-            <Grid item xs>
-              {/* <Link href="#" variant="body2">
-                Forgot password?
-              </Link> */}
-            </Grid>
-            <Grid item>
-              {/* <Link href="#" variant="body2">
-                {"Don't have an account? Sign Up"}
-              </Link> */}
-            </Grid>
-          </Grid>
         </Box>
       </Box>
     </Container>
