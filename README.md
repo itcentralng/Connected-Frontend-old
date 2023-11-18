@@ -1,72 +1,38 @@
-# Getting Started with Create React App
+﻿# ConnectEd
+## Tools used
+**Cohere and Langchain:** Our large language model through Langchain to give personalized responses
+**Weaviate:** Our vector store for embeddings generated through cohere's embedding model through Weaviate's text2vec-cohere plugin.
+**FastAPI:** Our web framework for building APIs in python
+**SQLite:** Our database for keeping organization information and other related data.
+**ReactJS:** Our JavaScript frontend framework for the user dashboard.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Datasets
+1. 
 
-## Available Scripts
+## How to use Connected
+1. Create an account on [AfricasTalking](https://account.africastalking.com/auth/register?next=%2Fapps%2Fsandbox).
+2. Go to the simulator [click here](https://developers.africastalking.com/simulator).
+3. Enter any number (can be any number its only active in the sandbox) and click connect.
+4. Send a question to our service short codes (3525 for the WHO example).
 
-In the project directory, you can run:
+## How to setup Connected locally on your computer
+### The Backend
+1. Create accounts in the following platforms: [Cohere](https://dashboard.cohere.com/welcome/login), [Weaviate](https://console.weaviate.cloud/), [AfricasTalking](https://account.africastalking.com/auth/register).
+2. Clone the backend repo `git clone https://github.com/itcentralng/connected-cohere-hack.git`
+3. Install the project dependencies `pip install -r requirements.txt`
+4. Copy the contents of .env.example file into a new file .env (make sure you get your API keys from Cohere, Weaviate, AfricasTalking).
+5. Create an empty db/ directory that will house the database
+6. Run it `uvicorn main:app`
+7. To initialize the database send an initial get request to `/initdb` end point.
 
-### `npm start`
+***Note:*** AfricasTalking API key may take some time after creation before you can use it.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### The FrontEnd
+1. Clone the frontend repo `git clone https://github.com/itcentralng/Connected-Frontend.git`
+2. Install the project dependencies `npm install --legacy-peer-deps`
+3. Run it `npm run dev`
+4. Go to http://localhost:3000/
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
-# Connected-Frontend
-# Connected-Frontend
+## To Dos
+1. We will use an ORM instead of an SQLite client.
+2. Do a lot of code refactoring.

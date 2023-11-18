@@ -12,7 +12,7 @@ export const userSlice = createSlice({
     login: (state, action) => {
       state.isAuth = true;
       state.user = action.payload;
-      console.log(state.isAuth);
+      console.log(action.payload);
     },
     logout: (state) => {
       state.isAuth = false;

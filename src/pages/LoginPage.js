@@ -41,7 +41,8 @@ const LoginPage = () => {
         .then((data) => {
           console.log(data);
           if (!data?.error) {
-            dispatch(login());
+            console.log(data);
+            dispatch(login(data));
             navigate("/addfile");
           }
         });
