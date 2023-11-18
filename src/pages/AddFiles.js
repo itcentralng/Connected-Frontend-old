@@ -34,14 +34,17 @@ export default function AddFiles() {
       const formData = new FormData();
       formData.append("file", file);
       formData.append("shortcode", shortcode);
-      fetch(`http://localhost:8000/organization/WHO/uploadfile`, {
-        method: "POST",
-        body: formData,
-        mode: "cors",
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-        },
-      })
+      fetch(
+        `https://connected-cohere-hack.onrender.com/organization/WHO/uploadfile`,
+        {
+          method: "POST",
+          body: formData,
+          mode: "cors",
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+          },
+        }
+      )
         .then((res) => res.json())
         .then((data) => setAddedFile(data));
     }

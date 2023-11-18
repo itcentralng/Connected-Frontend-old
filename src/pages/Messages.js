@@ -11,7 +11,7 @@ import {
 const Messages = () => {
   const [messages, setMessages] = useState([]);
   useEffect(() => {
-    fetch("http://localhost:8000/WHO/messages/")
+    fetch("https://connected-cohere-hack.onrender.com/WHO/messages/")
       .then((res) => res.json())
       .then((data) => {
         setMessages(data);

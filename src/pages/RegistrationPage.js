@@ -27,7 +27,7 @@ const RegistrationPage = () => {
   const handleSignUp = () => {
     if (formData?.password === confirmPassword) {
       if (formData?.password !== "") {
-        fetch("http://127.0.0.1:8000/register", {
+        fetch("https://connected-cohere-hack.onrender.com/register", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

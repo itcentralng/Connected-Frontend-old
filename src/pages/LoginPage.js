@@ -30,7 +30,7 @@ const LoginPage = () => {
     event.preventDefault();
     console.log(formData);
     if (formData?.password && formData.email) {
-      fetch("http://127.0.0.1:8000/organization", {
+      fetch("https://connected-cohere-hack.onrender.com/organization", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -40,7 +40,7 @@ const LoginPage = () => {
         .then((res) => res.json())
         .then((data) => {
           console.log(data);
-          if (!data.error) {
+          if (!data?.error) {
             dispatch(login());
             navigate("/addfile");
           }

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -15,7 +15,6 @@ import { useSelector } from "react-redux";
 
 const ProtectedRoute = ({ children }) => {
   const { isAuth } = useSelector((state) => state.user);
-
   if (!isAuth) {
     return <Navigate to="/login" replace />;
   }
