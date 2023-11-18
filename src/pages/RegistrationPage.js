@@ -27,7 +27,7 @@ const RegistrationPage = () => {
   const handleSignUp = () => {
     if (formData?.password === confirmPassword) {
       if (formData?.password !== "") {
-        fetch("https://connected-cohere-hack.onrender.com/register", {
+        fetch(`${process.env.REACT_APP_API_URL}/register`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -59,7 +59,6 @@ const RegistrationPage = () => {
       >
         Welcome to Connected
       </Typography>
-
       <Container component="main" maxWidth="xs" style={{ marginTop: 30 }}>
         <Paper
           elevation={3}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import {
@@ -19,6 +19,10 @@ const LoginPage = () => {
   const dispatch = useDispatch();
   const [formData, setFormData] = useState();
 
+  useEffect(() => {
+    console.log(process.env.REACT_APP_API_URL);
+  }, []);
+
   const handleFormChange = (event) => {
     setFormData((prev) => ({
       ...prev,
@@ -30,7 +34,7 @@ const LoginPage = () => {
     event.preventDefault();
     console.log(formData);
     if (formData?.password && formData.email) {
-      fetch("https://connected-cohere-hack.onrender.com/organization", {
+      fetch(`${process.env.REACT_APP_API_URL}/organization`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

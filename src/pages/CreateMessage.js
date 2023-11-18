@@ -16,10 +16,10 @@ export default function CreateMessage() {
   const [showSnack, setShowSnack] = React.useState();
 
   useEffect(() => {
-    fetch(`https://connected-cohere-hack.onrender.com/WHO/shortcodes`)
+    fetch(`${process.env.REACT_APP_API_URL}/WHO/shortcodes`)
       .then((res) => res.json())
       .then((data) => setShortCodes(data?.short_codes));
-    fetch(`https://connected-cohere-hack.onrender.com/areas`)
+    fetch(`${process.env.REACT_APP_API_URL}/areas`)
       .then((res) => res.json())
       .then((data) => setAreas(data));
   }, []);
@@ -27,7 +27,7 @@ export default function CreateMessage() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (shortcode.short_code && message && location.length) {
-      fetch(`https://connected-cohere-hack.onrender.com/WHO/message/add`, {
+      fetch(`${process.env.REACT_APP_API_URL}/WHO/message/add`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
