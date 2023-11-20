@@ -1,26 +1,11 @@
-import React, { useEffect } from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-} from "react-router-dom";
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Layout from "./layout/Layout";
 import CreateMessage from "./pages/CreateMessage";
 import Messages from "./pages/Messages";
 import AddFiles from "./pages/AddFiles";
 import LoginPage from "./pages/LoginPage";
 import RegistrationPage from "./pages/RegistrationPage";
-import { useSelector } from "react-redux";
-
-const ProtectedRoute = ({ children }) => {
-  const { isAuth } = useSelector((state) => state.user);
-  if (!isAuth) {
-    return <Navigate to="/login" />;
-  }
-
-  return children;
-};
 
 const App = () => {
   return (
@@ -35,11 +20,7 @@ const App = () => {
         {/* Routes with Layout */}
         <Route
           // path="/*"
-          element={
-            <ProtectedRoute>
-              <Layout />
-            </ProtectedRoute>
-          }
+          element={<Layout />}
         >
           <Route path="/addfile" element={<AddFiles />} />
           <Route path="/createmessage" element={<CreateMessage />} />
