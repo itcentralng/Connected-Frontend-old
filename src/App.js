@@ -6,6 +6,7 @@ import Messages from "./pages/Messages";
 import AddFiles from "./pages/AddFiles";
 import LoginPage from "./pages/LoginPage";
 import RegistrationPage from "./pages/RegistrationPage";
+import Files from "./pages/Files";
 
 const App = () => {
   return (
@@ -25,6 +26,7 @@ const App = () => {
           <Route path="/addfile" element={<AddFiles />} />
           <Route path="/createmessage" element={<CreateMessage />} />
           <Route path="/messages" element={<Messages />} />
+          <Route path="/files" element={<Files />} />
         </Route>
 
         <Route path="*" element={<h1>404, page not found</h1>} />

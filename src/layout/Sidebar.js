@@ -39,6 +39,11 @@ const Sidebar = ({ drawerWidth }) => {
       text: "Messages",
       link: "messages",
     },
+    {
+      icon: <ViewList />,
+      text: "Files",
+      link: "files",
+    },
   ];
 
   const handleLogout = () => {
