@@ -11,11 +11,13 @@ import {
   TextField,
 } from "@mui/material";
 import SimpleSnackbar from "../components/snackbar";
+import { useSelector } from "react-redux";
 
 export default function AddFiles() {
   const [file, setFile] = React.useState("");
   const [shortcode, setShortCode] = React.useState("");
   const [addedFile, setAddedFile] = React.useState();
+  const { user } = useSelector((state) => state.user);
 
   const handleFileChange = async (e) => {
     setFile(e.target.files[0]);
@@ -34,14 +36,13 @@ export default function AddFiles() {
       const formData = new FormData();
       formData.append("file", file);
       formData.append("shortcode", shortcode);
-      fetch(`${process.env.REACT_APP_API_URL}/organization/WHO/uploadfile`, {
-        method: "POST",
-        body: formData,
-        mode: "cors",
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-        },
-      })
+      fetch(
+        `${process.env.REACT_APP_API_URL}/organization/${user.name}/uploadfile`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      )
         .then((res) => res.json())
         .then((data) => setAddedFile(data));
     }

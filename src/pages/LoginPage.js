@@ -19,10 +19,6 @@ const LoginPage = () => {
   const dispatch = useDispatch();
   const [formData, setFormData] = useState();
 
-  useEffect(() => {
-    console.log(process.env.REACT_APP_API_URL);
-  }, []);
-
   const handleFormChange = (event) => {
     setFormData((prev) => ({
       ...prev,
@@ -44,7 +40,6 @@ const LoginPage = () => {
       })
         .then((res) => res.json())
         .then((data) => {
-          console.log(data);
           if (!data?.error) {
             console.log(data);
             dispatch(login(data));

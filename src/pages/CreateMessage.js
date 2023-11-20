@@ -6,6 +6,7 @@ import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import { FormControl, FormLabel, MenuItem, Select } from "@mui/material";
 import SimpleSnackbar from "../components/snackbar";
+import { useSelector } from "react-redux";
 
 export default function CreateMessage() {
   const [message, setMessage] = useState("");
@@ -14,20 +15,23 @@ export default function CreateMessage() {
   const [shortcodes, setShortCodes] = React.useState([]);
   const [areas, setAreas] = React.useState([]);
   const [showSnack, setShowSnack] = React.useState();
+  const { user } = useSelector((state) => state.user);
 
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_API_URL}/WHO/shortcodes`)
-      .then((res) => res.json())
-      .then((data) => setShortCodes(data?.short_codes));
-    fetch(`${process.env.REACT_APP_API_URL}/areas`)
-      .then((res) => res.json())
-      .then((data) => setAreas(data));
-  }, []);
+    if (user.name) {
+      fetch(`${process.env.REACT_APP_API_URL}/${user.name}/shortcodes`)
+        .then((res) => res.json())
+        .then((data) => setShortCodes(data?.short_codes));
+      fetch(`${process.env.REACT_APP_API_URL}/areas`)
+        .then((res) => res.json())
+        .then((data) => setAreas(data));
+    }
+  }, [user]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (shortcode.short_code && message && location.length) {
-      fetch(`${process.env.REACT_APP_API_URL}/WHO/message/add`, {
+      fetch(`${process.env.REACT_APP_API_URL}/${user.name}/message/add`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -43,7 +47,7 @@ export default function CreateMessage() {
           setShowSnack(data.msg ? true : false);
         });
     }
-    setAreas([]);
+    setLocation([]);
     setShortCode("");
     setMessage("");
   };

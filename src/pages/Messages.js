@@ -7,11 +7,13 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
+import { useSelector } from "react-redux";
 
 const Messages = () => {
+  const { user } = useSelector((state) => state.user);
   const [messages, setMessages] = useState([]);
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_API_URL}/WHO/messages/`)
+    fetch(`${process.env.REACT_APP_API_URL}/${user.name}/messages/`)
       .then((res) => res.json())
       .then((data) => {
         setMessages(data);

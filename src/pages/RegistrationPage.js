@@ -36,7 +36,6 @@ const RegistrationPage = () => {
         })
           .then((res) => res.json())
           .then((data) => {
-            console.log(data);
             setShowSnack(true);
           });
       } else {
@@ -50,7 +49,7 @@ const RegistrationPage = () => {
   return (
     <>
       {showSnack ? (
-        <SimpleSnackbar message="Registration successfull. Go to Login page" />
+        <SimpleSnackbar message="Registration successful. Go to Login page" />
       ) : null}
       <Typography
         component="h1"
