@@ -27,6 +27,7 @@ const Files = () => {
           <TableRow>
             <TableCell>S/N</TableCell>
             <TableCell align="left">File Name</TableCell>
+            <TableCell align="left">Short code</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -37,6 +38,7 @@ const Files = () => {
             >
               <TableCell scope="row">{i + 1}</TableCell>
               <TableCell align="left">{row.name}</TableCell>
+              <TableCell align="left">{row.short_code}</TableCell>
             </TableRow>
           ))}
         </TableBody>
