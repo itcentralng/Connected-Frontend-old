@@ -11,7 +11,7 @@ import { useSelector } from "react-redux";
 export default function CreateMessage() {
   const [message, setMessage] = useState("");
   const [location, setLocation] = useState([]);
-  const [shortcode, setShortCode] = React.useState({ short_code: "" });
+  const [shortcode, setShortCode] = React.useState({ shortcode: "" });
   const [shortcodes, setShortCodes] = React.useState([]);
   const [areas, setAreas] = React.useState([]);
   const [showSnack, setShowSnack] = React.useState();
@@ -21,7 +21,7 @@ export default function CreateMessage() {
     if (user.name) {
       fetch(`${process.env.REACT_APP_API_URL}/${user.name}/shortcodes`)
         .then((res) => res.json())
-        .then((data) => setShortCodes(data?.short_codes));
+        .then((data) => setShortCodes(data));
       fetch(`${process.env.REACT_APP_API_URL}/areas`)
         .then((res) => res.json())
         .then((data) => setAreas(data));
@@ -30,25 +30,26 @@ export default function CreateMessage() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    if (shortcode.short_code && message && location.length) {
-      fetch(`${process.env.REACT_APP_API_URL}/${user.name}/message/add`, {
+    if (shortcode.shortcode && message && location.length) {
+      fetch(`${process.env.REACT_APP_API_URL}/${user.name}/message/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
           content: message,
-          shortcode: shortcode.short_code,
+          shortcode: shortcode.shortcode,
           areas: location,
         }),
       })
         .then((res) => res.json())
         .then((data) => {
           setShowSnack(data.msg ? true : false);
+          console.log(data);
         });
     }
     setLocation([]);
-    setShortCode("");
+    setShortCode({ shortcode: "" });
     setMessage("");
   };
 
@@ -61,7 +62,7 @@ export default function CreateMessage() {
 
   const handleShortCodeChange = async (e) => {
     const shortcode = shortcodes.find(
-      (code) => code.short_code === e.target.value
+      (code) => code.shortcode === e.target.value
     );
     setShortCode(shortcode);
   };
@@ -82,14 +83,14 @@ export default function CreateMessage() {
           <FormControl fullWidth margin="normal">
             <FormLabel>Choose shortcode</FormLabel>
             <Select
-              value={shortcode.short_code}
+              value={shortcode.shortcode}
               onChange={handleShortCodeChange}
               fullWidth
               required
             >
               {shortcodes?.map((code, i) => (
-                <MenuItem key={i} value={code.short_code}>
-                  {code.short_code}
+                <MenuItem key={i} value={code.shortcode}>
+                  {code.shortcode}
                 </MenuItem>
               ))}
             </Select>

@@ -12,12 +12,24 @@ import {
 } from "@mui/material";
 import SimpleSnackbar from "../components/snackbar";
 import { useSelector } from "react-redux";
+import { LoadingButton } from "@mui/lab";
 
 export default function AddFiles() {
   const [file, setFile] = React.useState("");
   const [shortcode, setShortCode] = React.useState("");
   const [addedFile, setAddedFile] = React.useState();
   const { user } = useSelector((state) => state.user);
+  const [loading, setLoading] = React.useState(false);
+  const [error, setError] = React.useState(false);
+
+  React.useEffect(() => {
+    if (error) {
+      const timeout = setTimeout(() => {
+        setError(false);
+      }, 3000);
+      return () => clearTimeout(timeout);
+    }
+  }, [error]);
 
   const handleFileChange = async (e) => {
     setFile(e.target.files[0]);
@@ -33,6 +45,7 @@ export default function AddFiles() {
   const handleFormSubmit = (e) => {
     e.preventDefault();
     if (file && shortcode) {
+      setLoading(true);
       const formData = new FormData();
       formData.append("file", file);
       formData.append("shortcode", shortcode);
@@ -44,12 +57,17 @@ export default function AddFiles() {
         }
       )
         .then((res) => res.json())
-        .then((data) => setAddedFile(data));
+        .then((data) => {
+          if (data.error) setError(true);
+          else setAddedFile(data);
+        });
+      setLoading(false);
     }
   };
 
   return (
     <Container component="main" maxWidth="md">
+      {error ? <SimpleSnackbar message="File upload failed." /> : null}
       <CssBaseline />
       <Box
         sx={{
@@ -59,9 +77,6 @@ export default function AddFiles() {
           alignItems: "center",
         }}
       >
-        {addedFile ? (
-          <SimpleSnackbar message="File Upload successfull" />
-        ) : null}
         <Box component="form" sx={{ mt: 1 }}>
           <FormControl fullWidth margin="normal">
             <FormLabel>Create ShortCode</FormLabel>
@@ -91,16 +106,17 @@ export default function AddFiles() {
               {false && <CircularProgress />}
             </Stack>
           </FormControl>
-          <Button
+          <LoadingButton
+            loading={loading}
             type="submit"
             fullWidth
-            // loading variant="outlined"
             variant="contained"
-            sx={{ mt: 3, mb: 2 }}
+            color="primary"
+            style={{ marginTop: 20 }}
             onClick={handleFormSubmit}
           >
-            Add
-          </Button>
+            <span>Add File</span>
+          </LoadingButton>
         </Box>
       </Box>
     </Container>

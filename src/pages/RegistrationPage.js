@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Container,
   Paper,
@@ -11,11 +11,23 @@ import {
 } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import SimpleSnackbar from "../components/snackbar";
+import { LoadingButton } from "@mui/lab";
 
 const RegistrationPage = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState();
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [showSnack, setShowSnack] = useState("");
+  const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (error) {
+      const timeout = setTimeout(() => {
+        setError(false);
+      }, 2000);
+      return () => clearTimeout(timeout);
+    }
+  }, [error]);
 
   const handleFormChange = (event) => {
     setFormData((prev) => ({
@@ -27,6 +39,7 @@ const RegistrationPage = () => {
   const handleSignUp = () => {
     if (formData?.password === confirmPassword) {
       if (formData?.password !== "") {
+        setLoading(true);
         fetch(`${process.env.REACT_APP_API_URL}/register`, {
           method: "POST",
           headers: {
@@ -36,7 +49,12 @@ const RegistrationPage = () => {
         })
           .then((res) => res.json())
           .then((data) => {
-            setShowSnack(true);
+            setLoading(false);
+            if (data.error) {
+              setError(true);
+            } else {
+              navigate("/login");
+            }
           });
       } else {
         alert("All fields are required");
@@ -48,8 +66,8 @@ const RegistrationPage = () => {
 
   return (
     <>
-      {showSnack ? (
-        <SimpleSnackbar message="Registration successful. Go to Login page" />
+      {error ? (
+        <SimpleSnackbar message="Registration was not successful. Pls try again" />
       ) : null}
       <Typography
         component="h1"
@@ -133,7 +151,7 @@ const RegistrationPage = () => {
                 />
               </Grid>
             </Grid>
-            <Button
+            {/* <Button
               type="button"
               fullWidth
               variant="contained"
@@ -142,7 +160,19 @@ const RegistrationPage = () => {
               onClick={handleSignUp}
             >
               Sign Up
-            </Button>
+            </Button> */}
+
+            <LoadingButton
+              loading={loading}
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              style={{ marginTop: 20 }}
+              onClick={handleSignUp}
+            >
+              <span>Submit</span>
+            </LoadingButton>
           </form>
           <Typography style={{ marginTop: 10 }}>
             Already have an account?{" "}

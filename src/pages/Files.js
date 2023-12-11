@@ -17,6 +17,7 @@ const Files = () => {
       .then((res) => res.json())
       .then((data) => {
         setFiles(data);
+        console.log(data);
       });
   }, []);
 
@@ -37,8 +38,8 @@ const Files = () => {
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
               <TableCell scope="row">{i + 1}</TableCell>
-              <TableCell align="left">{row.name}</TableCell>
-              <TableCell align="left">{row.short_code}</TableCell>
+              <TableCell align="left">{row.files.name}</TableCell>
+              <TableCell align="left">{row.shortcodes.shortcode}</TableCell>
             </TableRow>
           ))}
         </TableBody>

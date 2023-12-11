@@ -11,13 +11,26 @@ import {
   Typography,
 } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import LoadingButton from "@mui/lab/LoadingButton";
 import { useDispatch } from "react-redux";
 import { login } from "../store/user.slice";
+import SimpleSnackbar from "../components/snackbar";
 
 const LoginPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [formData, setFormData] = useState();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+
+  useEffect(() => {
+    if (error) {
+      const timeout = setTimeout(() => {
+        setError(false);
+      }, 2000);
+      return () => clearTimeout(timeout);
+    }
+  }, [error]);
 
   const handleFormChange = (event) => {
     setFormData((prev) => ({
@@ -28,9 +41,9 @@ const LoginPage = () => {
 
   const handleLogin = (event) => {
     event.preventDefault();
-    console.log(formData);
+    setLoading(true);
     if (formData?.password && formData.email) {
-      fetch(`${process.env.REACT_APP_API_URL}/organization`, {
+      fetch(`${process.env.REACT_APP_API_URL}/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -40,8 +53,10 @@ const LoginPage = () => {
       })
         .then((res) => res.json())
         .then((data) => {
-          if (!data?.error) {
-            console.log(data);
+          setLoading(false);
+          if (data.error) {
+            setError(true);
+          } else {
             dispatch(login(data));
             navigate("/addfile");
           }
@@ -53,6 +68,9 @@ const LoginPage = () => {
 
   return (
     <>
+      {error ? (
+        <SimpleSnackbar message="Login was not successful. Pls try again" />
+      ) : null}
       <Typography
         component="h1"
         variant="h5"
@@ -98,7 +116,8 @@ const LoginPage = () => {
                 />
               </Grid>
             </Grid>
-            <Button
+            <LoadingButton
+              loading={loading}
               type="submit"
               fullWidth
               variant="contained"
@@ -106,8 +125,8 @@ const LoginPage = () => {
               style={{ marginTop: 20 }}
               onClick={handleLogin}
             >
-              Login
-            </Button>
+              <span>Submit</span>
+            </LoadingButton>
           </form>
           <Typography style={{ marginTop: 10 }}>
             Don't have an account?{" "}
