@@ -50,6 +50,10 @@ const Sidebar = ({ drawerWidth }) => {
     dispatch(logout());
     navigate("/login");
   };
+  const handleClearDB = () => {
+    dispatch(logout());
+    navigate("/login");
+  };
 
   return (
     <Drawer
@@ -104,6 +108,12 @@ const Sidebar = ({ drawerWidth }) => {
           <ExitToApp />
         </ListItemIcon>
         <ListItemText primary="Logout" />
+      </ListItem>
+      <ListItem button onClick={handleClearDB}>
+        <ListItemIcon>
+          <ExitToApp />
+        </ListItemIcon>
+        <ListItemText primary="Clear DB" />
       </ListItem>
     </Drawer>
   );

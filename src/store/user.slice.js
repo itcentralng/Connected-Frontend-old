@@ -18,6 +18,11 @@ export const userSlice = createSlice({
       state.isAuth = false;
       state.user = null;
     },
+    cleardb: (state) => {
+      fetch(`${process.env.REACT_APP_API_URL}/cleardb`).then((res) =>
+        console.log("cleared")
+      );
+    },
   },
 });
 
